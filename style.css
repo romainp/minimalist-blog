@@ -1,0 +1,9 @@
+body{
+    margin:0;
+    }
+
+.header{
+    color:red;
+    width: 100%;
+    background: hsl(198, 31%, 85%);
+    }

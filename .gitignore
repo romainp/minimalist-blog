@@ -1,0 +1,13 @@
+*.o
+.DS_Store
+.*.swp
+*.orig
+*.rej
+*~
+.#*
+*#
+.emacs.desktop*
+*.pyc
+*.pyo
+TAGS*~
+git-src
