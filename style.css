@@ -1,9 +1,31 @@
 body{
     margin:0;
     }
-
+.font1{
+    font-size:0.5rem;
+    }
+.font2{
+    font-size:0.8rem;
+    }
+.font3{
+    font-size:1.2rem;
+    }
+.font4{
+    font-size:1.5rem;
+    }
+.font5{
+    font-size:1.9rem;
+    }
 .header{
     color:red;
     width: 100%;
     background: hsl(198, 31%, 85%);
+    display:inline-block;
+    }
+    
+.title{
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 400;
+    width:30rem;
+    margin: 4rem auto 4rem auto;
     }

@@ -1,14 +1,18 @@
 <html>
 <head>
+<link href='https://fonts.googleapis.com/css?family=Quicksand:400,700,300' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="style.css">
+
 <?php 
 if (isset($_GET['cat'])) {
     $cat_filter = $_GET['cat'];
 }else{
     $cat_filter = "none";  
 }
+
 $categories = ['woodwork', 'surfboard shaping', 'electronics', 'software'];
 echo "<div class='header'>";
+echo "<div class='title font5'>RO & SOME TOOLS</div>";
 foreach ($categories as $cat){
     echo "<div class='header-link'>".$cat."</div>";
 }
