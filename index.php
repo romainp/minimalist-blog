@@ -10,25 +10,34 @@ if (isset($_GET['cat'])) {
     $cat_filter = "none";  
 }
 
-$categories = ['woodwork', 'surfboard shaping', 'electronics', 'software'];
+$categories = ['woodwork', 'shape', 'electronics', 'software'];
+$categories_links = ['woodwork' => 'Woodwork', 'shape'=>'Surfboard Shaping', 'electronics'=>'Electronics', 'software'=>'Software'];
 echo "<div class='header'>";
-echo "<div class='title font5'>RO & SOME TOOLS</div>";
+echo "<div class='logo'>";
+echo "<div class='title font9'><a href='/blog/minimalist-blog/'>ROAST</a></div>";
+echo "<div class='subtitle font3'><a href='/blog/minimalist-blog/'>RO & SOME TOOLS</a></div>";
+echo "</div>";
 foreach ($categories as $cat){
-    echo "<div class='header-link'>".$cat."</div>";
+    echo "<div class='header-link'><a href='?cat=".$cat."'>".$categories_links[$cat]."</a></div>";
 }
 echo "</div>";
 ?>
 </head>
 <body>
 <?php
-$di = new RecursiveDirectoryIterator('./articles/');
-foreach (new RecursiveIteratorIterator($di) as $filename => $file) {
-    if (pathinfo($filename, PATHINFO_EXTENSION)  == 'json'){
-        $post = json_decode(file_get_contents($filename), true);
+$directory = './articles/';
+$posts = array_diff(scandir($directory), array('..', '.', '~'));
+rsort($posts);
+foreach ($posts as $p){
+    if (pathinfo($p, PATHINFO_EXTENSION)  == 'json'){
+        $post = json_decode(file_get_contents($directory.$p), true);
         if ($cat_filter == 'none'){
             echo $post['title'];
+            echo '<br>';
+            echo $post['id'];
             echo "<br><img width=100px src='".$post['thumb']."'><br>";
             echo $post['article'] ;
+            echo '<br>';
         }
         else{
             if ($post['category'] == $cat_filter){
