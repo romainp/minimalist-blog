@@ -4,7 +4,6 @@
 <link href='https://fonts.googleapis.com/css?family=Quicksand:400,700,300' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Rajdhani' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="style.css">
-
 <?php 
 if (isset($_GET['cat'])) {
     $cat_filter = $_GET['cat'];
@@ -16,7 +15,6 @@ if (isset($_GET['post'])) {
 }else{
     $post_filter = "none";  
 }
-
 $categories = ['woodwork', 'shape', 'electronics', 'software'];
 $categories_links = ['woodwork' => 'Woodwork', 'shape'=>'Surfboard Shaping', 'electronics'=>'Electronics', 'software'=>'Software'];
 echo "<div id='header' class='header'>";
@@ -51,7 +49,6 @@ $p=$posts[0];
 if (($cat_filter == 'none') && ($post_filter == 'none')) {
     if (pathinfo($p, PATHINFO_EXTENSION)  == 'json'){
         $post = json_decode(file_get_contents($directory.$p), true);
-
         echo "<div class = 'first_post'>";
         echo "<a href='?post=".$post['id']."'>";
         echo "<img src='".$post['thumb']."'></a>";
@@ -68,20 +65,15 @@ if (($cat_filter == 'none') && ($post_filter == 'none')) {
        // echo "<div class = 'article'>".$post['article']."</div>" ;
         echo '</a></div>';
         echo "<div class='void'></div>";
-
         }
     }
 $empty = 0;
 
 if ($post_filter == 'none') {
     for ($i=0;$i<3;$i++){
-
-            echo "<div class='column".$i."'>"; 
-
-         
+        echo "<div class='column".$i."'>"; 
         for($j=0;3*$j+$i<$posts_number;$j++){
             $p=$posts[3*$j+$i+1];
-
             if (pathinfo($p, PATHINFO_EXTENSION)  == 'json'){
                 $post = json_decode(file_get_contents($directory.$p), true);
                 if ($cat_filter == 'none'){
@@ -95,8 +87,6 @@ if ($post_filter == 'none') {
                     echo "<div class = 'title font4'>".$post['title']."</div>";
                     echo "<div class = 'abstract'>".$post['abstract']."</div>";
                     echo "<div class = 'date font2'>Posted on: ".substr($post['id'],6,2)."-".substr($post['id'],4,2)."-".substr($post['id'],0,4)."</div>";
-
-
                    // echo "<div class = 'article'>".$post['article']."</div>" ;
                     echo '</a></div>';
                     echo "<div class='void'></div>";
@@ -133,16 +123,12 @@ else{
     echo "<div class = 'title font4'>".$post['title']."</div>";
     echo "<div class = 'date font2'>Posted on: ".substr($post['id'],6,2)."-".substr($post['id'],4,2)."-".substr($post['id'],0,4)."</div>";
     echo "<div class = 'article'>".$post['article']."</div>";
-
-
-
    // echo "<div class = 'article'>".$post['article']."</div>" ;
     echo '</div>';
     echo "<div class='void'></div>";
 }
-
 if ($empty == 0){
-    echo "<div class='empty-page'>Looks like I am gonna have to get things moving here!</div>";
+    echo "<div class='empty_page'>Looks like I am gonna have to get things moving here!</div>";
 }
 //FOOTER
 echo "<div class='footer'>";
