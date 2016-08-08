@@ -53,11 +53,12 @@ if (($cat_filter == 'none') && ($post_filter == 'none')) {
         $post = json_decode(file_get_contents($directory.$p), true);
 
         echo "<div class = 'first_post'>";
-        
-        echo "<img src='".$post['thumb']."'><br>";
+        echo "<a href='?post=".$post['id']."'>";
+        echo "<img src='".$post['thumb']."'></a>";
         echo "<div class = 'category'>";
         echo "Latest Post: ";
         echo "<a href='?cat=".$post['category']."'>".$categories_links[$post['category']]."</a></div>";
+        echo "<a href='?post=".$post['id']."'>";
         echo "<div class='first_post_card'>";
         echo "<div class = 'title font4'>".$post['title']."</div>";
         //echo "<div class = 'title'>".$post['id']."</div>";
@@ -65,7 +66,7 @@ if (($cat_filter == 'none') && ($post_filter == 'none')) {
         echo "<div class = 'date font2'>Posted on: ".substr($post['id'],6,2)."-".substr($post['id'],4,2)."-".substr($post['id'],0,4)."</div>";
         echo '</div>';
        // echo "<div class = 'article'>".$post['article']."</div>" ;
-        echo '</div>';
+        echo '</a></div>';
         echo "<div class='void'></div>";
 
         }
@@ -87,9 +88,8 @@ if ($post_filter == 'none') {
                     $empty = 1;
                     echo "<div class = 'post'>";
                     echo "<a href='?post=".$post['id']."'>";
-                    echo "<img src='".$post['thumb']."'><br></a>";
+                    echo "<img src='".$post['thumb']."'></a>";
                     echo "<div class = 'category'>";
-                 
                     echo "<a href='?cat=".$post['category']."'>".$categories_links[$post['category']]."</a></div>";
                     echo "<a href='?post=".$post['id']."'>";
                     echo "<div class = 'title font4'>".$post['title']."</div>";
@@ -124,15 +124,16 @@ if ($post_filter == 'none') {
 else{
     $post = json_decode(file_get_contents($directory.$post_filter.'.json'), true);
     $empty = 1;
-    echo "<div class = 'post'>";
+    echo "<div class = 'single_post'>";
     
     echo "<img src='".$post['thumb']."'><br>";
     echo "<div class = 'category'>";
  
     echo "<a href='?cat=".$post['category']."'>".$categories_links[$post['category']]."</a></div>";
     echo "<div class = 'title font4'>".$post['title']."</div>";
-    echo "<div class = 'abstract'>".$post['abstract']."</div>";
     echo "<div class = 'date font2'>Posted on: ".substr($post['id'],6,2)."-".substr($post['id'],4,2)."-".substr($post['id'],0,4)."</div>";
+    echo "<div class = 'article'>".$post['article']."</div>";
+
 
 
    // echo "<div class = 'article'>".$post['article']."</div>" ;
@@ -141,8 +142,12 @@ else{
 }
 
 if ($empty == 0){
-    echo "Looks like I am gonna have to get things moving here!";
+    echo "<div class='empty-page'>Looks like I am gonna have to get things moving here!</div>";
 }
+//FOOTER
+echo "<div class='footer'>";
+echo "Hey it's me mate! Wanna  <a href='mailto:romain.pitz@gmail.com?Subject=Hello' target='_top'>send me an email?</a>";
+echo "</div>";
 ?>
 <script >
     jQuery(document).ready(function() {

@@ -2,6 +2,7 @@
 body{
     margin:5.8rem 0 0 0;
     font-family: 'Rajdhani', sans-serif;
+    color:#404040;
     }
 a{
     text-decoration:none;
@@ -121,7 +122,7 @@ a:hover{
     padding:0 2rem;
     align-self:center;
     }    
-.first_post, .post, .post img{
+.first_post, .post, .post img, .single_post{
     position:relative;
     }
 .first_post{
@@ -140,7 +141,7 @@ a:hover{
     text-align:left;
     box-shadow: 0 2px 15px rgba(0,0,0,0.30);
    }
-.first_post .category{
+.first_post .category, .single_post .category{
     position:absolute;
     top:7vw;
     right:0;
@@ -153,13 +154,17 @@ a:hover{
     text-transform:uppercase;
     padding:1 ;
     }
-.post{
+.first_post:hover a .title{
+     text-decoration:underline;   
+}
+.post, .single_post{
     width:100%;
     display:block;
     text-align:center;
 
 }
-.post:hover{
+
+.post:hover, .first_post:hover{
    box-shadow: 0 2px 15px rgba(0,0,0,0.30);
 }
 .column0{
@@ -178,11 +183,16 @@ a:hover{
         float:left;
             width:32%;
 }
-
-.post img{
+.post a:hover{
+    text-decoration:none;
+    }
+.post img, .single_post img{
     width:100%;
 }
-.post .title{
+.post:hover a .title{
+     text-decoration:underline;   
+}
+.post .title, .single_post .title{
     font-weight:bold;
     text-transform:uppercase;
     margin-top:1rem;
@@ -194,6 +204,11 @@ a:hover{
     text-align:right;
     padding:0.6rem 0.6rem 1rem 0 ;
 }
+.single_post .date{
+    font-style:italic;
+    text-align:right;
+    padding:0.6rem 2rem 1rem 0 ;
+}
 
 .post .category{
     position:absolute;
@@ -203,3 +218,31 @@ a:hover{
     padding:0.3rem 1rem;
     //box-shadow: 0 2px 15px rgba(0,0,0,0.30);
 }
+.post .category a:hover{
+     text-decoration:underline;   
+}
+.article{
+    margin:0 2rem;
+    text-align:left;
+    }
+.single_post .title{
+    margin:2rem auto 0 auto;
+    }
+.empty-page{
+    width:100%;
+    display:block;
+    padding:10rem 0;
+    text-align:center;
+    }
+.footer{
+    display:inline-block;
+    width:100%;
+    margin:0rem;
+    padding:4rem 0;
+    color:white;
+    background:#404040;
+    text-align:center;
+    }
+ .footer a{
+    color:white;
+    }
