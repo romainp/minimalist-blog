@@ -137,8 +137,8 @@ a:hover{
     bottom:10vw;
     right:20vw;
     background:white;
-    padding:1rem 1rem;
-    text-align:left;
+    padding:1rem 2rem;
+    text-align:center;
     box-shadow: 0 2px 15px rgba(0,0,0,0.30);
    }
 .first_post .category, .single_post .category{
@@ -195,7 +195,7 @@ a:hover{
 .post .title, .single_post .title{
     font-weight:bold;
     text-transform:uppercase;
-    margin-top:1rem;
+    margin:1rem auto 0.3rem auto;
     padding:0 0.6rem ;
     }
 
