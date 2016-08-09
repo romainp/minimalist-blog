@@ -84,7 +84,7 @@ a:hover{
 
 .title{
     font-family: 'Rajdhani', sans-serif;
-    font-weight: 400;
+    font-weight: bold;
     -webkit-transition: all 0.5s; /* Safari */
     transition: all 0.5s;
     -webkit-transition-timing-function: ease;
@@ -95,7 +95,7 @@ a:hover{
     font-family: 'Rajdhani', sans-serif;
     font-weight: 100;
     text-decoration:none!important;
-    font-size:1.355rem;
+    font-size:2.1rem;
     margin-left:0.2rem;
     -webkit-transition: all 0.5s; /* Safari */
     transition: all 0.5s;

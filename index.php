@@ -19,8 +19,8 @@ $categories = ['woodwork', 'shape', 'electronics', 'software'];
 $categories_links = ['woodwork' => 'Woodwork', 'shape'=>'Surfboard Shaping', 'electronics'=>'Electronics', 'software'=>'Software'];
 echo "<div id='header' class='header'>";
 echo "<div id='logo' class='logo'>";
-echo "<div id='title' class='title font9'><a href='/blog/minimalist-blog/'>ROAST</a></div>";
-echo "<div id='subtitle' class='subtitle'><a href='/blog/minimalist-blog/'>RO & SOME TOOLS</a></div>";
+echo "<div id='title' class='title font8'><a href='/blog/minimalist-blog/'>DUST</a></div>";
+echo "<div id='subtitle' class='subtitle'><a href='/blog/minimalist-blog/'>O'CLOCK</a></div>";
 echo "</div>";
 echo "<div id='header-links' class='header-links'>";
 echo "<div class='top-link'><a href='.'>Home</a></div>";
@@ -141,15 +141,15 @@ echo "</div>";
             var scroll = $(window).scrollTop();
             if (scroll > 0) {
                 $("#header").addClass("header-shadow");
-                $("#header-links").height("3.75rem");
+                $("#header-links").height("4.2rem");
                 $("#title").css("font-size","2rem");
-                $("#subtitle").css("font-size","0.67rem");
+                $("#subtitle").css("font-size","1.2rem");
             }
             else {
                 $("#header").removeClass("header-shadow");
                 $("#header-links").height("5.8rem");
-                $("#title").css("font-size","4rem");
-                $("#subtitle").css("font-size","1.355rem");
+                $("#title").css("font-size","3.4rem");
+                $("#subtitle").css("font-size","2.1rem");
             }
         });
     });
