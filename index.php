@@ -45,8 +45,6 @@ foreach($posts_list as $post){
 rsort($posts);
 $posts_number = count($posts);
 $close = "no";
-
-
 if(!empty(($args[array_search('cat', $args)]))){
     foreach($categories as &$cat){
         if($args[array_search('cat', $args)+1] == $cat){
@@ -73,13 +71,41 @@ else{
     $post_filter = "none";
 } 
 
-if(!empty(($args[array_search('post', $args)]))){
-    if(!empty($args[array_search('post', $args)+1])){
-        $post_filter = $args[array_search('post', $args)+1];
+$search_results = [];
+$found = 0;
+$search_filter = [];
+if(!empty(($args[array_search('search', $args)]))){
+        if(!empty($args[array_search('search', $args)+1])){
+            $search_filter = explode('-', $args[array_search('search', $args)+1]);   
+            foreach ($posts as $post){
+            $text = file_get_contents($directory.$post, true);
+            foreach ($search_filter as $search_term){
+           
+                if(strpos(strtolower($text), strtolower($search_term)) === false){
+                    break;
+                    }
+                $found = $found+1;
+             }
+             if ($found == sizeof($search_filter)){
+                array_push($search_results, $post);
+             }
+             $found = 0;
+             }
         }
-    else ($post_filter = "none");
-    }
-else ($post_filter = "none");
+}
+else{
+    $search_filter = "none";
+} 
+?>
+
+<form id="form1" name="form1" method="post" action=""> 
+  <input type="text" name="search" id="search" /> <input type="button" name="submit" id="submit" value="Submit">
+    </form>
+    
+    
+  <?php  
+    
+    
 
 $featured_post=$posts[0];
 if (($cat_filter=="none") && ($post_filter=="none")) {
@@ -149,7 +175,7 @@ if ($post_filter=="none") {
     }
 }
 else{
-    $post = json_decode(file_get_contents($directory.$post_filter.'.json'), true);
+    $post = json_decode(file_get_contents($directory.$post_filter), true);
     $empty = 1;
     echo "<div class = 'single_post'>";
     
@@ -220,7 +246,15 @@ echo "</div>";
     });
     
     
-    
+    function myFunction() {
+    document.getElementById("frm1").submit();
+}
+
+document.getElementById('submit').onclick = function() {
+    var search = document.getElementById('search').value.replace(/ /g,"-");;
+    location.href = '/search/' + search;
+};
+
     
 </script>
 </body>
