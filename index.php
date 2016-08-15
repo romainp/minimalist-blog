@@ -11,27 +11,6 @@ $args = explode('/', $path);                // Split path on slashes. String sta
 $args = array_diff($args, ["blog", "minimalist-blog"]);
 $categories = ['woodwork', 'shape', 'electronics', 'software'];
 $categories_links = ['woodwork' => 'Woodwork', 'shape'=>'Surfboard Shaping', 'electronics'=>'Electronics', 'software'=>'Software'];
-//echo $path;
-/*if(empty($elements[0])) {                       // No path elements means home
-    ShowHomepage();
-} else switch(array_shift($elements))             // Pop off first item and switch
-{
-*/
-
-
-
-/*
-if (isset($_GET['cat'])) {
-    $cat_filter = $_GET['cat'];
-}else{
-    $cat_filter = "none";  
-}
-if (isset($_GET['post'])) {
-    $post_filter = $_GET['post'];
-}else{
-    $post_filter = "none";  
-}
-*/
 
 echo "<div id='header' class='header'>";
 echo "<div id='logo' class='logo'>";
@@ -56,7 +35,13 @@ echo "</div>";
 <?php
 $first_post = "yes";
 $directory = './articles/';
-$posts = array_diff(scandir($directory), array('..', '.', '~'));
+$posts_list = array_diff(scandir($directory), array('..', '.', '~'));
+$posts = [];
+foreach($posts_list as $post){
+    if (($post[0] != '.') && (substr($post, strlen($post)-5,5) == '.json')){
+        array_push($posts, $post);
+    }  
+}
 rsort($posts);
 $posts_number = count($posts);
 $close = "no";
@@ -96,20 +81,17 @@ if(!empty(($args[array_search('post', $args)]))){
     }
 else ($post_filter = "none");
 
-
-
-
 $featured_post=$posts[0];
 if (($cat_filter=="none") && ($post_filter=="none")) {
     if (pathinfo($featured_post, PATHINFO_EXTENSION)  == 'json'){
         $post = json_decode(file_get_contents($directory.$featured_post), true);
         echo "<div class = 'first_post'>";
-        echo "<a href='/post/".$post['id']."'>";
+        echo "<a href='/post/".$post['id']."/".$post['slug']."'>";
         echo "<img src='".$post['thumb']."'></a>";
         echo "<div class = 'category'>";
         echo "Latest Post: ";
         echo "<a href='/cat/".$post['category']."'>".$categories_links[$post['category']]."</a></div>";
-        echo "<a href='/post/".$post['id']."'>";
+        echo "<a href='/post/".$post['id']."/".$post['slug']."'>";
         echo "<div class='first_post_card'>";
         echo "<div class = 'title font4'>".$post['title']."</div>";
         //echo "<div class = 'title'>".$post['id']."</div>";
@@ -134,11 +116,11 @@ if ($post_filter=="none") {
                 if ($cat_filter=="none"){
                     $empty = 1;
                     echo "<div class = 'post'>";
-                    echo "<a href='/post/".$post['id']."'>";
+                    echo "<a href='/post/".$post['id']."/".$post['title']."'>";
                     echo "<img src='".$post['thumb']."'></a>";
                     echo "<div class = 'category'>";
                     echo "<a href='/cat/".$post['category']."'>".$categories_links[$post['category']]."</a></div>";
-                    echo "<a href='/post/".$post['id']."'>";
+                    echo "<a href='/post/".$post['id']."/".$post['title']."'>";
                     echo "<div class = 'title font4'>".$post['title']."</div>";
                     echo "<div class = 'abstract'>".$post['abstract']."</div>";
                     echo "<div class = 'date font2'>Posted on: ".substr($post['id'],6,2)."-".substr($post['id'],4,2)."-".substr($post['id'],0,4)."</div>";
