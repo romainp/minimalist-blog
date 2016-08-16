@@ -21,15 +21,15 @@ function display_post_small($posts, $message){
             if (pathinfo($p, PATHINFO_EXTENSION)  == 'json'){
                 $post = json_decode(file_get_contents($directory.$p), true);
                 echo "<div class = 'post'>";
-                echo "<a href='/post/".$post['id']."/".$post['title']."'>";
+                echo "<a href='/minimalist-blog/post/".$post['id']."/".$post['title']."'>";
                 echo "<img src='".$post['thumb']."'></a>";
                 echo "<div class = 'category'> - ";
                 $post_cat = explode(', ', $post['category']);
                 foreach($post_cat as $cat){
-                    echo "<a href='/cat/".$cat."'>".$categories_links[$cat]."</a> - ";
+                    echo "<a href='/minimalist-blog/cat/".$cat."'>".$categories_links[$cat]."</a> - ";
                 }
                 echo "</div>";
-                echo "<a href='/post/".$post['id']."/".$post['title']."'>";
+                echo "<a href='/minimalist-blog/post/".$post['id']."/".$post['title']."'>";
                 echo "<div class = 'title font4'>".$post['title']."</div>";
                 echo "<div class = 'abstract'>".$post['abstract']."</div>";
                 echo "<div class = 'date font2'>Posted on: ".substr($post['id'],6,2)."-".substr($post['id'],4,2)."-".substr($post['id'],0,4)."</div>";
@@ -48,7 +48,7 @@ function display_single_post($post){
     echo "<div class = 'category'> - ";
     $post_cat = explode(', ', $post['category']);
     foreach($post_cat as $cat){
-        echo "<a href='/cat/".$cat."'>".$categories_links[$cat]."</a> - ";
+        echo "<a href='/minimalist-blog/cat/".$cat."'>".$categories_links[$cat]."</a> - ";
     }
     echo "</div>";
     echo "<div class = 'title font4'>".$post['title']."</div>";
@@ -60,16 +60,16 @@ function display_single_post($post){
 function display_featured_post($post){
     global $categories_links;
     echo "<div class = 'first_post'>";
-    echo "<a href='/post/".$post['id']."/".$post['slug']."'>";
+    echo "<a href='/minimalist-blog/post/".$post['id']."/".$post['slug']."'>";
     echo "<img src='".$post['thumb']."'></a>";
     echo "<div class = 'category'>";
     echo "Latest Post: - ";
     $post_cat = explode(', ', $post['category']);
     foreach($post_cat as $cat){
-        echo "<a href='/cat/".$cat."'>".$categories_links[$cat]."</a> - ";
+        echo "<a href='/minimalist-blog/cat/".$cat."'>".$categories_links[$cat]."</a> - ";
     }
     echo "</div>";
-    echo "<a href='/post/".$post['id']."/".$post['slug']."'>";
+    echo "<a href='/minimalist-blog/post/".$post['id']."/".$post['slug']."'>";
     echo "<div class='first_post_card'>";
     echo "<div class = 'title font4'>".$post['title']."</div>";
     echo "<div class = 'abstract'>".$post['abstract']."</div>";
@@ -87,17 +87,17 @@ $args = array_diff($args, ["blog", "minimalist-blog"]);
 
 echo "<div id='header' class='header'>";
 echo "<div id='logo' class='logo'>";
-echo "<div id='title' class='title font8'><a href='/blog/minimalist-blog/'>DUST</a></div>";
-echo "<div id='subtitle' class='subtitle'><a href='/blog/minimalist-blog/'>O'CLOCK</a></div>";
+echo "<div id='title' class='title font8'><a href='/minimalist-blog/'>DUST</a></div>";
+echo "<div id='subtitle' class='subtitle'><a href='/minimalist-blog/'>O'CLOCK</a></div>";
 echo "</div>";
 echo "<div id='header-links' class='header-links'>";
-echo "<div class='top-link'><a href='.'>Home</a></div>";
+echo "<div class='top-link'><a href='/minimalist-blog/'>Home</a></div>";
 foreach ($categories as $cat){
         if ($cat_filter == $cat){
-            echo "<div class='top-link italic'><a href='/cat/".$cat."'>".$categories_links[$cat]."</a></div>";
+            echo "<div class='top-link italic'><a href='/minimalist-blog/cat/".$cat."'>".$categories_links[$cat]."</a></div>";
         }
         else{
-            echo "<div class='top-link'><a href='/cat/".$cat."'>".$categories_links[$cat]."</a></div>";
+            echo "<div class='top-link'><a href='/minimalist-blog/cat/".$cat."'>".$categories_links[$cat]."</a></div>";
         }
 }
 echo "</div>";
@@ -120,7 +120,7 @@ $posts_number = count($posts);
 $close = "no";
 if(!empty(($args[array_search('cat', $args)]))){
     foreach($categories as &$cat){
-        if($args[array_search('cat', $args)+1] == $cat){
+        if($args[array_search('cat', $args)+1] === $cat){
             $cat_filter = $cat;
             break;
             }
@@ -193,18 +193,21 @@ $posts_to_show = [];
 $search_results = -1;
 $cat_posts = 0;
 if ($post_filter=="none") {
-                $empty = 1;
-                if ($cat_filter!="none"){
+               
+                if (($cat_filter!=="none") && ($cat_filter!=="404")){
                     foreach ($posts as $p){
                         if (pathinfo($p, PATHINFO_EXTENSION)  == 'json'){
                             $post = json_decode(file_get_contents($directory.$p), true);
                             if (strpos($post['category'], $cat_filter)!== false){
                                 array_push($posts_to_show, $p);
-                                $cat_posts +=1;
-                                
+                                $cat_posts += 1;
                             }
                        }
                     }                   
+                }
+                else if ($cat_filter==="404"){
+                    echo "<div class='empty_page'>Hu, looks like there is a problem with the category you tried to retrieve.</div>";
+                     $empty = 1;
                 }
                 else if ($search_filter!="none"){
                     $posts_to_show = $search_posts;
@@ -215,22 +218,29 @@ if ($post_filter=="none") {
                 }
                 if(count($posts_to_show)>0){
                     display_post_small($posts_to_show, implode(" ", $search_filter) );
+                     $empty = 1;
                 }
                 else if($search_filter!="none"){
                     display_search_no_result(implode(" ", $search_filter));
+                     $empty = 1;
                 }
-                else if ($cat_posts>0){
+                else if (($cat_posts==0) && ($cat_filter!=="404")){
                     echo "<div class='empty_page'>Looks like I am gonna have to get things moving here!</div>";
+                     $empty = 1;
                 }
-                else{
-                    $empty = 0;
-                }
+                
 }
 
 else{
     $post = json_decode(file_get_contents($directory.$post_filter), true);
-    $empty = 1;
-    display_single_post($post);
+    if(!empty($post)){
+        $empty = 1;
+        display_single_post($post);
+    }
+    else{
+         echo "<div class='empty_page'>Could not find that post, hum..</div>";
+         $empty = 1;
+    }
 }
 if ($empty == 0){
     echo "<div class='empty_page'>404</div>";
