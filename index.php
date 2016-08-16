@@ -3,7 +3,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <link href='https://fonts.googleapis.com/css?family=Quicksand:400,700,300' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Rajdhani' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="/blog/minimalist-blog/style.css">
+<link rel="stylesheet" href="/minimalist-blog/style.css">
 <?php 
 $directory = './articles/';
 $categories = ['woodwork', 'shape', 'electronics', 'software'];
