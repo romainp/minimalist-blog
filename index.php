@@ -299,7 +299,7 @@ echo "</div>";
     
 function submit_search(){
         var search = document.getElementById('search').value.replace(/ /g,"-");;
-    location.href = '../search/' + search;}
+    location.href = '/minimalist-blog/search/' + search;}
 document.getElementById('submit').onclick = function() {
     submit_search();
 };
