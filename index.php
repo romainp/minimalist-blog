@@ -5,12 +5,85 @@
 <link href='https://fonts.googleapis.com/css?family=Rajdhani' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="/blog/minimalist-blog/style.css">
 <?php 
+$directory = './articles/';
+$categories = ['woodwork', 'shape', 'electronics', 'software'];
+$categories_links = ['woodwork' => 'Woodwork', 'shape'=>'Surfboard Shaping', 'electronics'=>'Electronics', 'software'=>'Software'];
+function display_post_small($posts, $message){
+    global $directory;
+    global $categories_links;
+    if(!empty($message)){
+        echo "<div> Results for: <b>".$message."</b></div>";
+    }
+    for ($i=0;$i<3;$i++){
+        echo "<div class='column".$i."'>"; 
+        for($j=0;3*$j+$i<count($posts);$j++){
+            $p=$posts[3*$j+$i];
+            if (pathinfo($p, PATHINFO_EXTENSION)  == 'json'){
+                $post = json_decode(file_get_contents($directory.$p), true);
+                echo "<div class = 'post'>";
+                echo "<a href='/post/".$post['id']."/".$post['title']."'>";
+                echo "<img src='".$post['thumb']."'></a>";
+                echo "<div class = 'category'> - ";
+                $post_cat = explode(', ', $post['category']);
+                foreach($post_cat as $cat){
+                    echo "<a href='/cat/".$cat."'>".$categories_links[$cat]."</a> - ";
+                }
+                echo "</div>";
+                echo "<a href='/post/".$post['id']."/".$post['title']."'>";
+                echo "<div class = 'title font4'>".$post['title']."</div>";
+                echo "<div class = 'abstract'>".$post['abstract']."</div>";
+                echo "<div class = 'date font2'>Posted on: ".substr($post['id'],6,2)."-".substr($post['id'],4,2)."-".substr($post['id'],0,4)."</div>";
+                echo '</a></div>';
+                echo "<div class='void'></div>";
+            }
+        } 
+        echo "</div>";   
+    }
+}
 
+function display_single_post($post){
+    global $categories_links;
+    echo "<div class = 'single_post'>";
+    echo "<img src='".$post['thumb']."'><br>";
+    echo "<div class = 'category'> - ";
+    $post_cat = explode(', ', $post['category']);
+    foreach($post_cat as $cat){
+        echo "<a href='/cat/".$cat."'>".$categories_links[$cat]."</a> - ";
+    }
+    echo "</div>";
+    echo "<div class = 'title font4'>".$post['title']."</div>";
+    echo "<div class = 'date font2'>Posted on: ".substr($post['id'],6,2)."-".substr($post['id'],4,2)."-".substr($post['id'],0,4)."</div>";
+    echo "<div class = 'article'>".$post['article']."</div>";
+    echo '</div>';
+    echo "<div class='void'></div>";
+}
+function display_featured_post($post){
+    global $categories_links;
+    echo "<div class = 'first_post'>";
+    echo "<a href='/post/".$post['id']."/".$post['slug']."'>";
+    echo "<img src='".$post['thumb']."'></a>";
+    echo "<div class = 'category'>";
+    echo "Latest Post: - ";
+    $post_cat = explode(', ', $post['category']);
+    foreach($post_cat as $cat){
+        echo "<a href='/cat/".$cat."'>".$categories_links[$cat]."</a> - ";
+    }
+    echo "</div>";
+    echo "<a href='/post/".$post['id']."/".$post['slug']."'>";
+    echo "<div class='first_post_card'>";
+    echo "<div class = 'title font4'>".$post['title']."</div>";
+    echo "<div class = 'abstract'>".$post['abstract']."</div>";
+    echo "<div class = 'date font2'>Posted on: ".substr($post['id'],6,2)."-".substr($post['id'],4,2)."-".substr($post['id'],0,4)."</div>";
+    echo '</div>';
+    echo '</a></div>';
+    echo "<div class='void'></div>";
+}
+function display_search_no_result($search_filter){
+    echo "<div class='empty_page'>Sorry, did not find anything matching <b>".$search_filter."</b>.</div>"; 
+}
 $path = ltrim($_SERVER['REQUEST_URI'], '/');    // Trim leading slash(es)
 $args = explode('/', $path);                // Split path on slashes. String starts with /
 $args = array_diff($args, ["blog", "minimalist-blog"]);
-$categories = ['woodwork', 'shape', 'electronics', 'software'];
-$categories_links = ['woodwork' => 'Woodwork', 'shape'=>'Surfboard Shaping', 'electronics'=>'Electronics', 'software'=>'Software'];
 
 echo "<div id='header' class='header'>";
 echo "<div id='logo' class='logo'>";
@@ -33,8 +106,8 @@ echo "</div>";
 </head>
 <body>
 <?php
-$first_post = "yes";
 $directory = './articles/';
+$first_post = "yes";
 $posts_list = array_diff(scandir($directory), array('..', '.', '~'));
 $posts = [];
 foreach($posts_list as $post){
@@ -71,7 +144,7 @@ else{
     $post_filter = "none";
 } 
 
-$search_results = [];
+$search_posts = [];
 $found = 0;
 $search_filter = [];
 if(!empty(($args[array_search('search', $args)]))){
@@ -87,7 +160,7 @@ if(!empty(($args[array_search('search', $args)]))){
                 $found = $found+1;
              }
              if ($found == sizeof($search_filter)){
-                array_push($search_results, $post);
+                array_push($search_posts, $post);
              }
              $found = 0;
              }
@@ -105,93 +178,62 @@ else{
     
   <?php  
     
-    
+$home_page = 0;
 
 $featured_post=$posts[0];
-if (($cat_filter=="none") && ($post_filter=="none")) {
+if (($cat_filter=="none") && ($post_filter=="none") && ($search_filter=="none") ) { //if ($path === '/'){
     if (pathinfo($featured_post, PATHINFO_EXTENSION)  == 'json'){
         $post = json_decode(file_get_contents($directory.$featured_post), true);
-        echo "<div class = 'first_post'>";
-        echo "<a href='/post/".$post['id']."/".$post['slug']."'>";
-        echo "<img src='".$post['thumb']."'></a>";
-        echo "<div class = 'category'>";
-        echo "Latest Post: ";
-        echo "<a href='/cat/".$post['category']."'>".$categories_links[$post['category']]."</a></div>";
-        echo "<a href='/post/".$post['id']."/".$post['slug']."'>";
-        echo "<div class='first_post_card'>";
-        echo "<div class = 'title font4'>".$post['title']."</div>";
-        //echo "<div class = 'title'>".$post['id']."</div>";
-        echo "<div class = 'abstract'>".$post['abstract']."</div>";
-        echo "<div class = 'date font2'>Posted on: ".substr($post['id'],6,2)."-".substr($post['id'],4,2)."-".substr($post['id'],0,4)."</div>";
-        echo '</div>';
-       // echo "<div class = 'article'>".$post['article']."</div>" ;
-        echo '</a></div>';
-        echo "<div class='void'></div>";
+        display_featured_post($post);
+        $home_page = 1;
         }
-    }
-$empty = 0;
-
+    
+}
+$posts_to_show = [];
+$search_results = -1;
+$cat_posts = 0;
 if ($post_filter=="none") {
-    for ($i=0;$i<3;$i++){
-        echo "<div class='column".$i."'>"; 
-        for($j=0;3*$j+$i<$posts_number;$j++){
-            $p=$posts[3*$j+$i+1];
-
-            if (pathinfo($p, PATHINFO_EXTENSION)  == 'json'){
-                $post = json_decode(file_get_contents($directory.$p), true);
-                if ($cat_filter=="none"){
-                    $empty = 1;
-                    echo "<div class = 'post'>";
-                    echo "<a href='/post/".$post['id']."/".$post['title']."'>";
-                    echo "<img src='".$post['thumb']."'></a>";
-                    echo "<div class = 'category'>";
-                    echo "<a href='/cat/".$post['category']."'>".$categories_links[$post['category']]."</a></div>";
-                    echo "<a href='/post/".$post['id']."/".$post['title']."'>";
-                    echo "<div class = 'title font4'>".$post['title']."</div>";
-                    echo "<div class = 'abstract'>".$post['abstract']."</div>";
-                    echo "<div class = 'date font2'>Posted on: ".substr($post['id'],6,2)."-".substr($post['id'],4,2)."-".substr($post['id'],0,4)."</div>";
-                   // echo "<div class = 'article'>".$post['article']."</div>" ;
-                    echo '</a></div>';
-                    echo "<div class='void'></div>";
+                $empty = 1;
+                if ($cat_filter!="none"){
+                    foreach ($posts as $p){
+                        if (pathinfo($p, PATHINFO_EXTENSION)  == 'json'){
+                            $post = json_decode(file_get_contents($directory.$p), true);
+                            if (strpos($post['category'], $cat_filter)!== false){
+                                array_push($posts_to_show, $p);
+                                $cat_posts +=1;
+                                
+                            }
+                       }
+                    }                   
+                }
+                else if ($search_filter!="none"){
+                    $posts_to_show = $search_posts;
+                }
+                
+                else{
+                    $posts_to_show = array_slice($posts, 1);
+                }
+                if(count($posts_to_show)>0){
+                    display_post_small($posts_to_show, implode(" ", $search_filter) );
+                }
+                else if($search_filter!="none"){
+                    display_search_no_result(implode(" ", $search_filter));
+                }
+                else if ($cat_posts>0){
+                    echo "<div class='empty_page'>Looks like I am gonna have to get things moving here!</div>";
                 }
                 else{
-                    if ($post['category'] == $cat_filter){
-                        $empty = 1;
-                        echo "<div class = 'post'>";
-                        echo "<img src='".$post['thumb']."'><br>";
-                        echo "<div class = 'category'>";
-                        echo "<a href='/cat/".$post['category']."'>".$categories_links[$post['category']]."</a></div>";
-                        echo "<div class = 'title font4'>".$post['title']."</div>";
-                        echo "<div class = 'abstract'>".$post['abstract']."</div>";
-                        echo "<div class = 'date font2'>Posted on: ".substr($post['id'],6,2)."-".substr($post['id'],4,2)."-".substr($post['id'],0,4)."</div>";
-                        // echo "<div class = 'article'>".$post['article']."</div>" ;
-                        echo '</div>';
-                        echo "<div class='void'></div>";
-                    }
+                    $empty = 0;
                 }
-            }
-        }
-        echo "</div>";
-    }
 }
+
 else{
     $post = json_decode(file_get_contents($directory.$post_filter), true);
     $empty = 1;
-    echo "<div class = 'single_post'>";
-    
-    echo "<img src='".$post['thumb']."'><br>";
-    echo "<div class = 'category'>";
- 
-    echo "<a href='/cat/".$post['category']."'>".$categories_links[$post['category']]."</a></div>";
-    echo "<div class = 'title font4'>".$post['title']."</div>";
-    echo "<div class = 'date font2'>Posted on: ".substr($post['id'],6,2)."-".substr($post['id'],4,2)."-".substr($post['id'],0,4)."</div>";
-    echo "<div class = 'article'>".$post['article']."</div>";
-   // echo "<div class = 'article'>".$post['article']."</div>" ;
-    echo '</div>';
-    echo "<div class='void'></div>";
+    display_single_post($post);
 }
 if ($empty == 0){
-    echo "<div class='empty_page'>Looks like I am gonna have to get things moving here!</div>";
+    echo "<div class='empty_page'>404</div>";
 }
 
 ?>
@@ -245,16 +287,18 @@ echo "</div>";
         });
     });
     
-    
-    function myFunction() {
-    document.getElementById("frm1").submit();
-}
-
+function submit_search(){
+        var search = document.getElementById('search').value.replace(/ /g,"-");;
+    location.href = '../search/' + search;}
 document.getElementById('submit').onclick = function() {
-    var search = document.getElementById('search').value.replace(/ /g,"-");;
-    location.href = '/search/' + search;
+    submit_search();
 };
-
+document.getElementById('search').onkeydown = function(e){
+   if(e.keyCode == 13){
+     e.preventDefault();
+     submit_search();
+   }
+};
     
 </script>
 </body>
