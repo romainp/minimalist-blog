@@ -425,9 +425,22 @@ else if (isset($_GET['email']) and isset($_GET['key'])){
                     if (scroll < header_end - window_height || header_scroll < 0){
                         $('#header').css('top', -scroll);
                     }
+                    else if (scroll + header_scroll > header_end - window_height + 15){
+                     if (!$('#header').hasClass('hidden')){
+                            $('#header').addClass('hidden');
+                            $('#header').toggle('hide');
+
+                        }
+                    }
+                    else if (scroll + header_scroll < header_end - window_height + 16) {
+                        if ($('#header').hasClass('hidden')){
+                            $('#header').removeClass('hidden');
+                            $('#header').toggle('show');
+
+                        }
+                   }
                 }
                 else{
-
                     if (scroll > 15){
                         if (!$('#header').hasClass('hidden')){
                             $('#header').addClass('hidden');
