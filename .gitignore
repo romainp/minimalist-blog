@@ -11,3 +11,6 @@
 *.pyo
 TAGS*~
 git-src
+save/
+cgi-bin/
+articles/
